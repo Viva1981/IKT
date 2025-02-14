@@ -1,15 +1,16 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    place-items: center;
     height: 100vh;
     margin: 0;
+    text-align: center;
 }
 
 h1 {
     color: red;
 }
+
 img {
     max-width: 100%;
     height: auto;
