@@ -67,8 +67,14 @@
             });
         }
 
-        loadSheetData();
+        loadSheetData(); // Első betöltés
+        setInterval(loadSheetData, 30000); // 30 mp-enként frissítés
+
     </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
