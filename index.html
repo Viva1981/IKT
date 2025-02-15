@@ -58,15 +58,6 @@
             background-color: #ddd;
         }
 
-        .highlight-yellow {
-            background-color: yellow;
-        }
-
-        .highlight-blue {
-            background-color: blue;
-            color: white;
-        }
-
         .loading {
             font-size: 18px;
             color: #E63950;
@@ -117,11 +108,6 @@
             const loadingText = document.querySelector(".loading");
             const table = document.getElementById("data-table");
 
-            if (!tableHeader || !tableBody) {
-                console.error("Nem található a table-header vagy table-body elem.");
-                return;
-            }
-
             loadingText.style.display = "none";
             table.style.display = "table";
 
@@ -133,14 +119,8 @@
             });
 
             tableBody.innerHTML = "";
-            data.slice(1).forEach((row, index) => {
+            data.slice(1).forEach(row => {
                 const tr = document.createElement("tr");
-                if (row[0] && row[0].trim().startsWith('Egyéb Projekt')) {
-                    tr.classList.add('highlight-yellow');
-                }
-                if (row[0] && row[0].trim().startsWith('Menü')) {
-                    tr.classList.add('highlight-blue');
-                }
                 row.forEach(cell => {
                     const td = document.createElement("td");
                     td.textContent = cell;
@@ -155,7 +135,7 @@
         }
 
         loadSheetData();
-        setInterval(loadSheetData, 30000);
+        setInterval(loadSheetData, 30000); 
     </script>
 </body>
 </html>
