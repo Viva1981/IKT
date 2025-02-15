@@ -117,6 +117,11 @@
             const loadingText = document.querySelector(".loading");
             const table = document.getElementById("data-table");
 
+            if (!tableHeader || !tableBody) {
+                console.error("Nem található a table-header vagy table-body elem.");
+                return;
+            }
+
             loadingText.style.display = "none";
             table.style.display = "table";
 
@@ -130,10 +135,10 @@
             tableBody.innerHTML = "";
             data.slice(1).forEach((row, index) => {
                 const tr = document.createElement("tr");
-                if (row[0] && row[0].startsWith('Egyéb Projekt')) {
+                if (row[0] && row[0].trim().startsWith('Egyéb Projekt')) {
                     tr.classList.add('highlight-yellow');
                 }
-                if (row[0] && row[0].startsWith('Menü')) {
+                if (row[0] && row[0].trim().startsWith('Menü')) {
                     tr.classList.add('highlight-blue');
                 }
                 row.forEach(cell => {
