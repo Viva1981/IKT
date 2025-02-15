@@ -3,11 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NYÁR</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Google Sheets adatbetöltés</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
-    <h1>SZERELMEIM</h1>
-    <img src="css/IMG_20240716_055543.jpg" alt="ZALA_BEACH">
+
+    <h2>Projektkezelő</h2>
+    <table id="data-table">
+        <thead>
+            <tr id="table-header"></tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+
+    <script>
+        const API_KEY = "AIzaSyBCqmOG3VAy21KJ0C8UV-Buh3Orc1-igKI"; 
+        const SPREADSHEET_ID = "1f57-NuPxwdwVKAKr7D4-IuIOrxh9l_TBxh6yDu4u3To";  
+        const RANGE = "A1:Z100"; // Módosítsd a megfelelő tartományra
+
+        async function loadSheetData() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.values) {
+                    renderTable(data.values);
+                } else {
+                    console.error("Nincsenek adatok!");
+                }
+            } catch (error) {
+                console.error("Hiba történt:", error);
+            }
+        }
+
+        function renderTable(data) {
+            const tableHeader = document.getElementById("table-header");
+            const tableBody = document.getElementById("table-body");
+
+            // Fejléc beállítása
+            tableHeader.innerHTML = "";
+            data[0].forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                tableHeader.appendChild(th);
+            });
+
+            // Táblázat feltöltése
+            tableBody.innerHTML = "";
+            data.slice(1).forEach(row => {
+                const tr = document.createElement("tr");
+                row.forEach(cell => {
+                    const td = document.createElement("td");
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        loadSheetData();
+    </script>
+
 </body>
 </html>
