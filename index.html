@@ -3,50 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Sheets adatbetöltés</title>
+    <title>Projektkezelő</title>
     <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .table-container {
+            max-width: 90%;
+            margin: auto;
+            overflow-x: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Betöltés animáció */
+        .loading {
+            font-size: 18px;
+            color: #007bff;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Projektkezelő</h2>
-    <table id="data-table">
-        <thead>
-            <tr id="table-header"></tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-    </table>
+    <h2>📋 Projektkezelő</h2>
+    
+    <div class="table-container">
+        <p class="loading">🔄 Betöltés...</p>
+        <table id="data-table" style="display: none;">
+            <thead>
+                <tr id="table-header"></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
 
     <script>
         const API_KEY = "AIzaSyBCqmOG3VAy21KJ0C8UV-Buh3Orc1-igKI"; 
         const SPREADSHEET_ID = "1f57-NuPxwdwVKAKr7D4-IuIOrxh9l_TBxh6yDu4u3To";  
-        const RANGE = "A1:Z100"; // Módosítsd a megfelelő tartományra
+        const RANGE = "A1:Z100"; 
 
         async function loadSheetData() {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`;
-
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-
                 if (data.values) {
                     renderTable(data.values);
                 } else {
-                    console.error("Nincsenek adatok!");
+                    document.querySelector('.loading').textContent = "⚠️ Nincsenek adatok!";
                 }
             } catch (error) {
-                console.error("Hiba történt:", error);
+                document.querySelector('.loading').textContent = "❌ Hiba történt!";
+                console.error("Hiba:", error);
             }
         }
 
         function renderTable(data) {
             const tableHeader = document.getElementById("table-header");
             const tableBody = document.getElementById("table-body");
+            const loadingText = document.querySelector(".loading");
+            const table = document.getElementById("data-table");
 
-            // Fejléc beállítása
+            loadingText.style.display = "none";
+            table.style.display = "table";
+
             tableHeader.innerHTML = "";
             data[0].forEach(header => {
                 const th = document.createElement("th");
@@ -54,7 +110,6 @@
                 tableHeader.appendChild(th);
             });
 
-            // Táblázat feltöltése
             tableBody.innerHTML = "";
             data.slice(1).forEach(row => {
                 const tr = document.createElement("tr");
@@ -67,14 +122,11 @@
             });
         }
 
-        loadSheetData(); // Első betöltés
-        setInterval(loadSheetData, 30000); // 30 mp-enként frissítés
+        loadSheetData();
+        setInterval(loadSheetData, 30000); 
 
     </script>
 
 </body>
 </html>
 
-
-</body>
-</html>
